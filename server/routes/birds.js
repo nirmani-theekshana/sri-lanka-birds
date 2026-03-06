@@ -5,33 +5,36 @@ const auth = require('../middleware/authMiddleware');
 
 // Get all birds (search + filter)
 router.get('/', auth, async (req, res) => {
-    const { search, family_id } = req.query;
+  const { search, family_id } = req.query;
 
-    let query = `
-    SELECT b.*.bf.common_family_name, bf.family_name
+  let query = `
+    SELECT b.*, bf.common_family_name, bf.family_name
     FROM birds b
-    JOIN bird_damilies bf ON b.family_id = bf.id
+    JOIN bird_families bf ON b.family_id = bf.id
     WHERE b.is_endemic = TRUE
-    `;
-    const params = [];
+  `;
+  const params = [];
 
-    if (search) {
-        params.push(`%${search}%`);
-        query += ` AND (b.common_name ILIKE $${params.length} 
-        OR b.scientific_name ILIKE $${params.length})`;
-    }
-    if (family_id) {
-        params.push(family_id);
-        query += ` AND b.family_id = $${params.length}`;
-    }
-    query += ' ORDER BY b.common_name';
+  if (search) {
+    params.push(`%${search}%`);
+    query += ` AND (b.common_name ILIKE $${params.length}
+      OR b.scientific_name ILIKE $${params.length})`;
+  }
 
-    try {
-        const result = await pool.query(query, params);
-        res.json(result.rows);
-    } catch (err) {
-        res.status(500).json({ error: 'failed to fetch birds' });
-    }
+  if (family_id) {
+    params.push(family_id);
+    query += ` AND b.family_id = $${params.length}`;
+  }
+
+  query += ' ORDER BY b.common_name';
+
+  try {
+    const result = await pool.query(query, params);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Bird query error:', err.message);
+    res.status(500).json({ error: 'failed to fetch birds' });
+  }
 });
 
 //get all birds families for dropdown filter

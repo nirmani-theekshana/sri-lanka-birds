@@ -8,6 +8,15 @@ import EndemicBirdsPage from './pages/EndemicBirdsPage';
 import AboutBirdsPage from './pages/AboutBirdsPage';
 import ContactPage from './pages/ContactPage';
 
+// DEBUG — paste this in browser console to see which is broken
+console.log('LoginPage:', typeof LoginPage);
+console.log('RegisterPage:', typeof RegisterPage);
+console.log('HomePage:', typeof HomePage);
+console.log('EndemicBirdsPage:', typeof EndemicBirdsPage);
+console.log('AboutBirdsPage:', typeof AboutBirdsPage);
+console.log('ContactPage:', typeof ContactPage);
+console.log('ProtectedRoute:', typeof ProtectedRoute);
+
 function App() {
   return (
     <AuthProvider>
