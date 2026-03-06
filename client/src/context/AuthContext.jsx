@@ -1,15 +1,11 @@
 import { createContext, useState, useContext } from 'react';
 
-const AuthContext = createContext(null);
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    try {
-      const saved = localStorage.getItem('user') || sessionStorage.getItem('user');
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
+    const saved = localStorage.getItem('user') || sessionStorage.getItem('user');
+    return saved ? JSON.parse(saved) : null;
   });
 
   const login = (userData, token, remember) => {
@@ -35,8 +31,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth must be used inside AuthProvider');
-  return context;
-};
+export const useAuth = () => useContext(AuthContext);

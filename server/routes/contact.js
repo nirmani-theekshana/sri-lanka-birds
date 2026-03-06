@@ -1,34 +1,36 @@
 const express = require('express');
 const router = express.Router();
-const nodemailer = require('nodemailer');
+const pool = require('../db/pool');
 
 router.post('/', async (req, res) => {
-    const { name, email, message } = req.body;
+  const { name, email, message } = req.body;
 
-    if (!name || !email || !message) {
-        return res.status(400).json({ error: 'All fields are required' });
-    }
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
 
-    try {
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-        });
+  try {
+    // Save message to database instead of email
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS contact_messages (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100),
+        email VARCHAR(255),
+        message TEXT,
+        created_at TIMESTAMP DEFAULT NOW()
+      )
+    `);
 
-        await transporter.sendMail({
-            from: email,
-            to: process.env.EMAIL_USER,
-            subject: `Contact Form Message from ${name}`,
-            text: `From: ${name} ${email} ${message}`,
-        });
+    await pool.query(
+      'INSERT INTO contact_messages (name, email, message) VALUES ($1, $2, $3)',
+      [name, email, message]
+    );
 
-        res.json({ message: 'Message sent successfully' });
-    } catch (err) {
-        res.status(500).json({ error: 'Failed to send message' });
-    }
+    res.json({ message: 'Message sent successfully!' });
+  } catch (err) {
+    console.error('Contact error:', err.message);
+    res.status(500).json({ error: 'Failed to send message' });
+  }
 });
 
 module.exports = router;
