@@ -1,30 +1,30 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import api from '../api';
 import './LoginPage.css';
- 
+
 const LoginPage = () => {
-  const [form, setForm] = useState({ email: "", password: "", rememberMe: false });
-  const [error, setError] = useState("");
+  const [form, setForm] = useState({ email: '', password: '', rememberMe: false });
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
- 
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setForm(prev => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
+    setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
- 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', {
+      const res = await api.post('/api/auth/login', {
         email: form.email,
         password: form.password,
-        rememberMe: form.rememberMe
+        rememberMe: form.rememberMe,
       });
       login(res.data.user, res.data.token, form.rememberMe);
       navigate('/');
@@ -34,7 +34,7 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
- 
+
   return (
     <div className="auth-container">
       <div className="auth-card">
@@ -58,14 +58,13 @@ const LoginPage = () => {
             <label htmlFor="rememberMe">Remember me for 7 days</label>
           </div>
           <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-                   </button>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
         </form>
-        <p>Don't have an account? <Link to='/register'>Register here</Link></p>
+        <p>Don't have an account? <Link to="/register">Register here</Link></p>
       </div>
     </div>
   );
 };
- 
-export default LoginPage;
 
+export default LoginPage;
