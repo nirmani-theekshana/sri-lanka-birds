@@ -1,0 +1,13 @@
+.endemic-page { max-width: 1200px; margin: 0 auto; padding: 50px 40px; }
+.endemic-page h1 { font-size: 40px; color: var(--dark); margin-bottom: 8px; }
+.subtitle { color: var(--gray); font-size: 16px; margin-bottom: 36px; }
+.filter-bar { display: flex; gap: 16px; margin-bottom: 36px; flex-wrap: wrap; }
+.search-input, .family-select {
+  padding: 12px 18px; border: 2px solid #e5e7eb;
+  border-radius: 8px; font-size: 15px; outline: none;
+  transition: border-color 0.2s;
+}
+.search-input { flex: 1; min-width: 250px; }
+.search-input:focus, .family-select:focus { border-color: var(--teal); }
+.family-select { min-width: 200px; cursor: pointer; }
+.birds-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }

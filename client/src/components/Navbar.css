@@ -1,0 +1,20 @@
+.navbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 70px;
+  background: var(--teal);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; color: white;
+  font-size: 20px; font-weight: 700; }
+.nav-logo { font-size: 28px; }
+.nav-links { display: flex; list-style: none; gap: 8px; }
+.nav-link { color: rgba(255,255,255,0.85); text-decoration: none;
+  padding: 8px 16px; border-radius: 6px; transition: background 0.2s; }
+.nav-link:hover, .nav-link.active {
+  background: rgba(255,255,255,0.2); color: white; }
+.nav-user { display: flex; align-items: center; gap: 12px; }
+.nav-username { color: rgba(255,255,255,0.9); font-size: 14px; }
+.logout-btn { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.4);
+  padding: 7px 16px; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+.logout-btn:hover { background: rgba(255,255,255,0.3); }

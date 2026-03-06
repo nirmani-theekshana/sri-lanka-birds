@@ -1,0 +1,16 @@
+.hero {
+  background: linear-gradient(rgba(13,115,119,0.75), rgba(0,0,0,0.5)),
+  url('https://images.unsplash.com/photo-1444464666168-49d633b86797?w=1400') center/cover no-repeat;
+  min-height: 520px; display: flex; align-items: center; justify-content: center;
+}
+.hero-content { text-align: center; color: white; padding: 40px; }
+.hero-content h1 { font-size: 48px; margin-bottom: 20px; text-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+.hero-content p { font-size: 20px; margin-bottom: 30px; opacity: 0.9; }
+.hero-btn { background: white; color: var(--teal); padding: 14px 36px;
+  border-radius: 30px; text-decoration: none; font-weight: 700;
+  font-size: 16px; transition: transform 0.2s; display: inline-block; }
+.hero-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+.recent-section { max-width: 1200px; margin: 60px auto; padding: 0 40px; }
+.recent-section h2 { font-size: 30px; color: var(--dark); margin-bottom: 30px; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+.empty-msg { color: var(--gray); font-size: 16px; }
