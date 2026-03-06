@@ -1,27 +1,27 @@
 import { useState } from 'react';
-import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import api from '../api';
 import './ContactPage.css';
- 
+
 const ContactPage = () => {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [status, setStatus] = useState({ type: "", msg: "" });
- 
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState({ type: '', msg: '' });
+
   const handleChange = (e) =>
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
- 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/contact', form);
-      setStatus({ type: "success", msg: "Message sent! We will reply soon." });
-      setForm({ name: "", email: "", message: "" });
+      await api.post('/api/contact', form);
+      setStatus({ type: 'success', msg: 'Message sent! We will reply soon.' });
+      setForm({ name: '', email: '', message: '' });
     } catch {
-      setStatus({ type: "error", msg: "Failed to send. Please try again." });
+      setStatus({ type: 'error', msg: 'Failed to send. Please try again.' });
     }
   };
- 
+
   return (
     <div>
       <Navbar />
@@ -43,5 +43,5 @@ const ContactPage = () => {
     </div>
   );
 };
- 
+
 export default ContactPage;

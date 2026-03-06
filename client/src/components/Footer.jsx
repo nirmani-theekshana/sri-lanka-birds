@@ -1,5 +1,5 @@
 import './Footer.css';
- 
+
 const Footer = () => (
   <footer className="footer">
     <div className="footer-content">
@@ -16,10 +16,8 @@ const Footer = () => (
     </div>
     <div className="footer-bottom">
       <p>© 2025 Sri Lanka Birds. All rights reserved.</p>
-          </div>
+    </div>
   </footer>
 );
- 
+
 export default Footer;
-
-
