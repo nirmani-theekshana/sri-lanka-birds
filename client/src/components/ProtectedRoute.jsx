@@ -1,10 +1,12 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
- 
+
 const ProtectedRoute = ({ children }) => {
-  const { user } = useAuth();
-  // If not logged in → redirect to login page
-  return user ? children : <Navigate to="/login" replace />;
+  const auth = useAuth();
+  
+  if (!auth) return <Navigate to="/login" replace />;
+  
+  return auth.user ? children : <Navigate to="/login" replace />;
 };
- 
+
 export default ProtectedRoute;

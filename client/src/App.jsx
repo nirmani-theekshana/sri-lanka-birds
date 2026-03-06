@@ -8,16 +8,22 @@ import EndemicBirdsPage from './pages/EndemicBirdsPage';
 import AboutBirdsPage from './pages/AboutBirdsPage';
 import ContactPage from './pages/ContactPage';
 
+// DEBUG — paste this in browser console to see which is broken
+console.log('LoginPage:', typeof LoginPage);
+console.log('RegisterPage:', typeof RegisterPage);
+console.log('HomePage:', typeof HomePage);
+console.log('EndemicBirdsPage:', typeof EndemicBirdsPage);
+console.log('AboutBirdsPage:', typeof AboutBirdsPage);
+console.log('ContactPage:', typeof ContactPage);
+console.log('ProtectedRoute:', typeof ProtectedRoute);
+
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          {/* Public routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
- 
-          {/* Protected routes — must be logged in */}
           <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
           <Route path="/endemic-birds" element={<ProtectedRoute><EndemicBirdsPage /></ProtectedRoute>} />
           <Route path="/about-birds" element={<ProtectedRoute><AboutBirdsPage /></ProtectedRoute>} />
@@ -27,7 +33,5 @@ function App() {
     </AuthProvider>
   );
 }
- 
-export default App;
 
- 
+export default App;
