@@ -1,43 +1,61 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BirdCard from '../components/BirdCard';
-import { useAuth } from '../context/AuthContext';
+import api from '../api';
 import './EndemicBirdsPage.css';
- 
+
 const EndemicBirdsPage = () => {
   const [birds, setBirds] = useState([]);
   const [families, setFamilies] = useState([]);
-  const [search, setSearch] = useState("");
-  const [selectedFamily, setSelectedFamily] = useState("");
+  const [search, setSearch] = useState('');
+  const [selectedFamily, setSelectedFamily] = useState('');
   const [loading, setLoading] = useState(true);
-  const { getToken } = useAuth();
- 
-  const headers = { Authorization: `Bearer ${getToken()}` };
- 
+  const [error, setError] = useState('');
+
+  // Fetch families for dropdown
   useEffect(() => {
-    axios.get("http://localhost:5000/api/birds/families", { headers })
-      .then(res => setFamilies(res.data));
+    api.get('/api/birds/families')
+      .then(res => {
+        console.log('Families loaded:', res.data);
+        setFamilies(res.data);
+      })
+      .catch(err => {
+        console.error('Families error:', err.response?.data || err.message);
+      });
   }, []);
- 
+
+  // Fetch birds when search or family changes
   useEffect(() => {
     setLoading(true);
-    axios.get("http://localhost:5000/api/birds", {
-      headers,
-      params: { search, family_id: selectedFamily }
-    })
-    .then(res => { setBirds(res.data); setLoading(false); })
-    .catch(() => setLoading(false));
+    setError('');
+
+    const params = {};
+    if (search.trim()) params.search = search.trim();
+    if (selectedFamily) params.family_id = selectedFamily;
+
+    console.log('Fetching birds with params:', params);
+
+    api.get('/api/birds', { params })
+      .then(res => {
+        console.log('Birds loaded:', res.data.length, 'birds');
+        setBirds(res.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Birds error:', err.response?.data || err.message);
+        setError('Failed to load birds. Please try again.');
+        setLoading(false);
+      });
   }, [search, selectedFamily]);
- 
+
   return (
     <div>
       <Navbar />
       <div className="endemic-page">
         <h1>Endemic Birds of Sri Lanka</h1>
         <p className="subtitle">33 species found nowhere else on Earth</p>
- 
+
         <div className="filter-bar">
           <input
             type="text"
@@ -52,19 +70,37 @@ const EndemicBirdsPage = () => {
             className="family-select"
           >
             <option value="">All Families</option>
-              {families.map(f => (
-              <option key={f.id} value={f.id}>{f.common_family_name}</option>
+            {families.map(f => (
+              <option key={f.id} value={f.id}>
+                {f.common_family_name}
+              </option>
             ))}
           </select>
         </div>
- 
-        {loading ? <p>Loading birds...</p> : (
+
+        {loading && (
+          <div className="loading-msg">
+            <p>🔄 Loading birds...</p>
+          </div>
+        )}
+
+        {error && (
+          <div className="error-msg-page">
+            <p>❌ {error}</p>
+          </div>
+        )}
+
+        {!loading && !error && birds.length === 0 && (
+          <div className="no-results">
+            <p>No birds found. Try a different search.</p>
+          </div>
+        )}
+
+        {!loading && !error && birds.length > 0 && (
           <div className="birds-grid">
-            {birds.length === 0 ? (
-              <p>No birds found matching your search.</p>
-            ) : (
-              birds.map(bird => <BirdCard key={bird.id} bird={bird} />)
-            )}
+            {birds.map(bird => (
+              <BirdCard key={bird.id} bird={bird} />
+            ))}
           </div>
         )}
       </div>
@@ -72,6 +108,5 @@ const EndemicBirdsPage = () => {
     </div>
   );
 };
- 
-export default EndemicBirdsPage;
 
+export default EndemicBirdsPage;
